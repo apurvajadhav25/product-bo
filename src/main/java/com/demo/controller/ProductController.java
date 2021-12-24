@@ -69,8 +69,9 @@ public class ProductController {
 											@RequestParam(name="price", required=false) String price,
 											@RequestParam(name="sort", required=false) String sort
 											){
+		System.out.println(sort);
 		
-		if("".equals(filter1) && "".equals(filter2) && "".equals(price) && "".equals(sort)) {
+		if("".equals(filter1) && "".equals(filter2) && "".equals(price)) {
 			System.out.println("initial");
 			return productRepository.findProducts();
 		} /*

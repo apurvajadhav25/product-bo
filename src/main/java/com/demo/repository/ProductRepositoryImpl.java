@@ -56,6 +56,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 	    }
 	    
 	    if(sort!=null) {
+	    	System.out.println(sort);
 	    	if(sort=="low")
 	    	  cq.orderBy(cb.asc(product.get("price")));  
 	    	else

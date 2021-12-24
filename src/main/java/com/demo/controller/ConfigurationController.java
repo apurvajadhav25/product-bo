@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.model.Configuration;
-import com.demo.model.Filter1;
 import com.demo.repository.ConfigurationRepository;
-import com.demo.repository.Filter1Repository;
 
 @RestController
 @CrossOrigin
@@ -39,6 +38,12 @@ public class ConfigurationController {
 		 */
 		return configurationRepository.save(configuration);
 	    }
+	
+	@GetMapping("/configurationByKey")
+	public Iterable<Configuration> getAllProducts(@RequestParam(name="key") String key){
+		return configurationRepository.findByKey(key);
+		
+	}
 	
 	@DeleteMapping("/configuration/{id}")
 	public String deleteConfiguration(@PathVariable(value = "id") Integer id) {
