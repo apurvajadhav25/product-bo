@@ -20,7 +20,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 	EntityManager em ;
 	
 	@Override
-	public List<Product> findProducts(String filter1, String filter2, String price,String sort) {
+	public List<Product> findProducts(String filter1, String filter2, String price, String sort, String isEnable) {
 		
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 	    CriteriaQuery<Product> cq = cb.createQuery(Product.class);
@@ -29,23 +29,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 	  
 	    List<Predicate> predicates = new ArrayList<>();
 	    
-	    if (filter1 != null) {
-	    	String filter1Array[] = filter1.split(",");
-	    	In<String> inClause1 = cb.in(product.get("filter1"));
-			for (String title1 : filter1Array) {
-			    inClause1.value(title1);
-			}
-	        predicates.add(inClause1);
-	    }
-	    
-	    if (filter2 != null) {
-	    	String filter2Array[] = filter2.split(",");
-	    	In<String> inClause2 = cb.in(product.get("filter2"));
-			for (String title2 : filter2Array) {
-			    inClause2.value(title2);
-			}
-	        predicates.add(inClause2);
-	    }
+	    setPredicates(filter1, cb, product, predicates, "filter1");
+	    setPredicates(filter2, cb, product, predicates, "filter2");
 	    
 	    if (price != null) {
 	    	 String[] priceArray = price.split("-");
@@ -57,14 +42,37 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 	    
 	    if(sort!=null) {
 	    	System.out.println(sort);
-	    	if(sort=="low")
+	    	if("low".equals(sort)) {
+	    	  System.out.println("in low if ");
 	    	  cq.orderBy(cb.asc(product.get("price")));  
-	    	else
-	    	  cq.orderBy(cb.desc(product.get("price")));
+			} /*
+				 * else if(sort == "high"){ System.out.println("in high if ");
+				 * cq.orderBy(cb.desc(product.get("price"))); }
+				 */ else {
+	    		System.out.println("in high if");
+	    		cq.orderBy(cb.desc(product.get("price")));
+	    	}
 	    }
+	    
+		/*
+		 * if(isEnable != null && isEnable == "true") { cb.equal(isEnable, true);
+		 * 
+		 * }
+		 */
 	     
 	    cq.where(predicates.toArray(new Predicate[0]));
 	    return em.createQuery(cq).getResultList();
+	}
+
+	private void setPredicates(String filter, CriteriaBuilder cb, Root<Product> product, List<Predicate> predicates, String filterType) {
+		if (filter != null) {
+	    	String filterArray[] = filter.split(",");
+	    	In<String> filterClause = cb.in(product.get(filterType));
+			for (String filterValue : filterArray) {
+			    filterClause.value(filterValue);
+			}
+	        predicates.add(filterClause);
+	    }
 	}
 
 	@Override

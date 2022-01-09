@@ -63,32 +63,31 @@ public class ProductController {
 	 * }
 	 */
 	
-	@GetMapping("/enableProducts")
+	@GetMapping("/products")
 	public Iterable<Product> getAllProducts(@RequestParam(name="filter1", required=false) String filter1, 
 											@RequestParam(name="filter2", required=false) String filter2,
 											@RequestParam(name="price", required=false) String price,
-											@RequestParam(name="sort", required=false) String sort
+											@RequestParam(name="sort", required=false) String sort,
+											@RequestParam(name="enable", required=false) String enable
 											){
-		System.out.println(sort);
-		
 		if("".equals(filter1) && "".equals(filter2) && "".equals(price)) {
 			System.out.println("initial");
 			return productRepository.findProducts();
-		} /*
+		} 
+		/*
 			 * else if(!"".equals(filter1) && "".equals(filter2)) { System.out.println("1");
 			 * return productRepository.findProductsByType(filter1); } else
 			 * if("".equals(filter1) && !"".equals(filter2)) { System.out.println("2");
 			 * return productRepository.findProductsByPurity(filter2); }
 			 */ else {
-			System.out.println("3");
-			return productRepository.findProducts(filter1,filter2,price,sort);
+			return productRepository.findProducts(filter1,filter2,price,sort,enable);
 		}
 	}
 	
-	@GetMapping("/products")
-	public  Iterable<Product> getEnableProduct(){
-		return  productRepository.findAll();
-	}
+	/*
+	 * @GetMapping("/products") public Iterable<Product> getEnableProduct(){ return
+	 * productRepository.findAll(); }
+	 */
 	
 	@GetMapping("/sortProducts")
 	public Iterable<Product> getSortedProducts(){
@@ -139,9 +138,12 @@ public class ProductController {
 	
 	@PostMapping("/uploadFile")
     public void uploadFile(Image image,@RequestPart(value = "file") MultipartFile[] file,@RequestParam("id") int id) {
+		Product product = productRepository.findById(id).get();
 		Arrays.asList(file).stream().forEach(file1 -> {
 			try {
-        String path= this.amazonClient.uploadFile(file1);
+        String path = this.amazonClient.uploadFile(file1);
+        product.setImagePath(path);
+        productRepository.save(product);
         image.setPath(path);
         Product p=new Product(id);
 		image.setProduct(p);

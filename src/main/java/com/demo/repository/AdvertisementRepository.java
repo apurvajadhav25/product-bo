@@ -7,7 +7,7 @@ import com.demo.model.Advertisement;
 
 public interface AdvertisementRepository  extends JpaRepository<Advertisement, Integer> {
 	
-	@Query("SELECT a FROM Advertisement a WHERE a.name= :name and a.isEnable='true'")
+	@Query("SELECT a FROM Advertisement a WHERE a.name= :name ")
 	Advertisement findByName(@Param("name") String name);
 
 }

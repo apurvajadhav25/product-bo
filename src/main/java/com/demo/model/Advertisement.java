@@ -1,10 +1,12 @@
 package com.demo.model;
 
-import javax.persistence.Column;
+
+import java.sql.Clob;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Entity
 public class Advertisement {
@@ -12,8 +14,8 @@ public class Advertisement {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int id;
 	String name;
-	//@Column(columnDefinition = "text[]")
-	String imagePath;
+	@Lob
+    String imagePath;
 	Boolean isEnable;
 	
 	public Advertisement() {
@@ -22,6 +24,10 @@ public class Advertisement {
 	
 	public int getId() {
 		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public String getImagePath() {
@@ -32,9 +38,6 @@ public class Advertisement {
 		this.imagePath = imagePath;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
 	public String getName() {
 		return name;
 	}
@@ -47,6 +50,7 @@ public class Advertisement {
 	public void setIsEnable(Boolean isEnable) {
 		this.isEnable = isEnable;
 	}
+
 	public Advertisement(int id, String name, String imagePath, Boolean isEnable) {
 		super();
 		this.id = id;
@@ -54,6 +58,13 @@ public class Advertisement {
 		this.imagePath = imagePath;
 		this.isEnable = isEnable;
 	}
+
+
+
+
+
+	
+	
 	
 	
 

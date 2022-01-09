@@ -31,13 +31,13 @@ public class Filter3Controller {
 	}
 	
 	@PostMapping("/filter3")
-	public Filter3 createFilter3(@RequestBody List<Filter3> filter3List) {
+	public Filter3 createFilter3(@RequestBody Filter3 filter3) {
 		  
-		  Filter3 savedFilter = null;
-		  for(Filter3 filter: filter3List) {
-			  savedFilter = filter3Repository.save(filter);
-		  }
-	    	 return savedFilter;
+		/*
+		 * Filter3 savedFilter = null; for(Filter3 filter: filter3List) { savedFilter =
+		 * filter3Repository.save(filter); }
+		 */
+		    return filter3Repository.save(filter3);
 	    }
 	
 	@DeleteMapping("/filter3/{id}")
