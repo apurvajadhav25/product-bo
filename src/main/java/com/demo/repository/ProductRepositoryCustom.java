@@ -8,5 +8,8 @@ public interface ProductRepositoryCustom {
 	List<Product> findProducts(String filter1,String filter2,String price,String sort,String enable);
 	List<Product> findProductsByType(String filter1);
 	List<Product> findProductsByPurity(String filter2);
+	
+	
+	
 
 }
