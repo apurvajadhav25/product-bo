@@ -15,8 +15,8 @@ public class UserDetail {
 	String mobileNumber;
 	String emailId;
 	String isEnable;
-	int wishlistIds;
-	int cartIds;
+	String wishlistIds;
+	String cartIds;
 	
 	public UserDetail() {
 		
@@ -58,21 +58,21 @@ public class UserDetail {
 	public void setIsEnable(String isEnable) {
 		this.isEnable = isEnable;
 	}
-	public int getWishlistIds() {
+	public String getWishlistIds() {
 		return wishlistIds;
 	}
-	public void setWishlistIds(int wishlistIds) {
+	public void setWishlistIds(String wishlistIds) {
 		this.wishlistIds = wishlistIds;
 	}
-	public int getCartIds() {
+	public String getCartIds() {
 		return cartIds;
 	}
-	public void setCartIds(int cartIds) {
+	public void setCartIds(String cartIds) {
 		this.cartIds = cartIds;
 	}
 
 	public UserDetail(int id, String username, String password, String mobileNumber, String emailId, String isEnable,
-			int wishlistIds, int cartIds) {
+			String wishlistIds, String cartIds) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -83,6 +83,8 @@ public class UserDetail {
 		this.wishlistIds = wishlistIds;
 		this.cartIds = cartIds;
 	}
+
+	
 	
 	
 	

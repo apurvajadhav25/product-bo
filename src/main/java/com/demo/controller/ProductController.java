@@ -108,6 +108,7 @@ public class ProductController {
 	
 	@GetMapping("/products/{id}")
 	public Product getProductbyId(@PathVariable(value = "id") Integer productId) {
+		System.out.println("poonam");
 		Product product = productRepository.findById(productId).get();
 		return product;	
 	}

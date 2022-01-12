@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.demo.model.Advertisement;
 import com.demo.model.Filter1;
 import com.demo.model.UserDetail;
 import com.demo.repository.UserDetailRepository;
@@ -35,8 +37,6 @@ public class UserDetailController {
 	
 	@PostMapping("/userDetail")
 	public UserDetail createUserDetail(@RequestBody UserDetail detail) {
-		System.out.println(" in create");
-		System.out.println(detail.getEmailId());
 		return userDetailRepository.save(detail);
 	    }
 	
@@ -64,5 +64,76 @@ public class UserDetailController {
         final UserDetail updatedDetail = userDetailRepository.save(detail);
         return ResponseEntity.ok(updatedDetail);
     }
+	
+	@GetMapping("/updateCartId")
+    public ResponseEntity<UserDetail> updateCartIds(@RequestParam(name = "cartIds", required = false) String cartId){
+		String finalCartIds = null;
+        UserDetail detail = userDetailRepository.findById(1).get();
+        String initialCartIds = detail.getCartIds();
+        if(initialCartIds != null) {
+        if(initialCartIds.contains(cartId)) 
+            finalCartIds = initialCartIds;
+        else 
+        	finalCartIds = initialCartIds.concat(cartId + ",");
+        }else 
+        	finalCartIds = cartId;
+        
+        detail.setCartIds(finalCartIds);
+        
+        final UserDetail updatedDetail = userDetailRepository.save(detail);
+        return ResponseEntity.ok(updatedDetail);
+    }
+	
+	@GetMapping("/updateWishlistId")
+    public ResponseEntity<UserDetail> updateWishlistIds(@RequestParam(name = "wishlistIds", required = false) String wishlistId){
+		String finalWishlistIds = null;
+        UserDetail detail = userDetailRepository.findById(1).get();
+        String initialWishlistIds = detail.getWishlistIds();
+        if(initialWishlistIds != null) {
+        if(initialWishlistIds.contains(wishlistId)) 
+            finalWishlistIds = initialWishlistIds;
+        else 
+        	finalWishlistIds = initialWishlistIds.concat(wishlistId + ",");
+        }else 
+        	finalWishlistIds = wishlistId;
+        
+        detail.setWishlistIds(finalWishlistIds);
+        
+        final UserDetail updatedDetail = userDetailRepository.save(detail);
+        return ResponseEntity.ok(updatedDetail);
+    }
+	
+	@GetMapping("/deleteCartIds")
+	public ResponseEntity<UserDetail> deleteCartIds(@RequestParam("cartIds") String cartId) {
+		  String finalCartIds;
+		  UserDetail detail = userDetailRepository.findById(1).get();
+		  String cartIds = detail.getCartIds();
+			
+			 /*if(!cartIds.contains(","))
+				 finalCartIds = cartIds.replace(cartId, "");
+			 else if(cartIds.endsWith(","))*/
+				  finalCartIds = cartIds.replace(cartId  + ",", "");
+					/*
+					 * else finalCartIds = cartIds.replace("," + cartId, "");
+					 */
+			 
+		     detail.setCartIds(finalCartIds);
+		  
+		  
+		  final UserDetail updatedDetail = userDetailRepository.save(detail);
+		  return ResponseEntity.ok(updatedDetail);
+	    }
+	
+	@GetMapping("/deleteWishlistIds")
+	public ResponseEntity<UserDetail> deleteWishlistIds(@RequestParam("wishlistIds") String wishlistId) {
+		  UserDetail detail = userDetailRepository.findById(1).get();
+		  String wishlistIds = detail.getWishlistIds();
+		  String finalWishlistIds = wishlistIds.replace(wishlistId  + ",", "");
+		  detail.setWishlistIds(finalWishlistIds);
+		  
+		  
+		  final UserDetail updatedDetail = userDetailRepository.save(detail);
+		  return ResponseEntity.ok(updatedDetail);
+	    }
 
 }
