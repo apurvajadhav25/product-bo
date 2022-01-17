@@ -35,6 +35,13 @@ public class UserDetailController {
 		return details;	
 	}
 	
+	@GetMapping("/userDetailByUsername")
+	public UserDetail getUserDetailByUsername(@RequestParam(value = "username") String username) {
+		System.out.println("oo");
+		UserDetail details = userDetailRepository.findByUsername(username);
+		return details;	
+	}
+	
 	@PostMapping("/userDetail")
 	public UserDetail createUserDetail(@RequestBody UserDetail detail) {
 		return userDetailRepository.save(detail);
@@ -66,15 +73,18 @@ public class UserDetailController {
     }
 	
 	@GetMapping("/updateCartId")
-    public ResponseEntity<UserDetail> updateCartIds(@RequestParam(name = "cartIds", required = false) String cartId){
+    public ResponseEntity<UserDetail> updateCartIds(@RequestParam(name = "cartIds", required = false) String cartId,
+    		                                        @RequestParam(name = "username", required = false) String username){
 		String finalCartIds = null;
-        UserDetail detail = userDetailRepository.findById(1).get();
+        UserDetail detail = userDetailRepository.findByUsername(username);
         String initialCartIds = detail.getCartIds();
         if(initialCartIds != null) {
         if(initialCartIds.contains(cartId)) 
             finalCartIds = initialCartIds;
+        else if(initialCartIds.equals(""))
+        	finalCartIds = cartId;
         else 
-        	finalCartIds = initialCartIds.concat(cartId + ",");
+        	finalCartIds = initialCartIds.concat("," +cartId);
         }else 
         	finalCartIds = cartId;
         
@@ -85,15 +95,18 @@ public class UserDetailController {
     }
 	
 	@GetMapping("/updateWishlistId")
-    public ResponseEntity<UserDetail> updateWishlistIds(@RequestParam(name = "wishlistIds", required = false) String wishlistId){
+    public ResponseEntity<UserDetail> updateWishlistIds(@RequestParam(name = "wishlistIds", required = false) String wishlistId,
+    		                                            @RequestParam(name = "username", required = false) String username){
 		String finalWishlistIds = null;
-        UserDetail detail = userDetailRepository.findById(1).get();
+        UserDetail detail = userDetailRepository.findByUsername(username);
         String initialWishlistIds = detail.getWishlistIds();
         if(initialWishlistIds != null) {
         if(initialWishlistIds.contains(wishlistId)) 
             finalWishlistIds = initialWishlistIds;
-        else 
-        	finalWishlistIds = initialWishlistIds.concat(wishlistId + ",");
+        else if(initialWishlistIds.equals(""))
+        	finalWishlistIds = wishlistId;
+        else
+        	finalWishlistIds = initialWishlistIds.concat("," +wishlistId);
         }else 
         	finalWishlistIds = wishlistId;
         
@@ -112,7 +125,10 @@ public class UserDetailController {
 			 /*if(!cartIds.contains(","))
 				 finalCartIds = cartIds.replace(cartId, "");
 			 else if(cartIds.endsWith(","))*/
-				  finalCartIds = cartIds.replace(cartId  + ",", "");
+		  if(cartIds.endsWith(cartId))
+			  finalCartIds = cartIds.replace(cartId, "");
+		  else
+			  finalCartIds = cartIds.replace(cartId  + ",", "");
 					/*
 					 * else finalCartIds = cartIds.replace("," + cartId, "");
 					 */
@@ -126,9 +142,13 @@ public class UserDetailController {
 	
 	@GetMapping("/deleteWishlistIds")
 	public ResponseEntity<UserDetail> deleteWishlistIds(@RequestParam("wishlistIds") String wishlistId) {
+		  String finalWishlistIds;
 		  UserDetail detail = userDetailRepository.findById(1).get();
 		  String wishlistIds = detail.getWishlistIds();
-		  String finalWishlistIds = wishlistIds.replace(wishlistId  + ",", "");
+		  if(wishlistIds.endsWith(wishlistId))
+			  finalWishlistIds = wishlistIds.replace(wishlistId, "");
+		  else
+		     finalWishlistIds = wishlistIds.replace(wishlistId  + ",", "");
 		  detail.setWishlistIds(finalWishlistIds);
 		  
 		  

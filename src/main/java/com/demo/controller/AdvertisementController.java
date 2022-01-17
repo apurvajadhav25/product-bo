@@ -100,15 +100,20 @@ public class AdvertisementController {
 		
     }
 	
-	@PutMapping("/deleteAdvertisement")
+	@GetMapping("/deleteAdvertisement")
 	public String deleteAdvertisementImage(@RequestParam("id") Integer id, @RequestParam("name") String name) {
+		  String finalImagePath;
 		System.out.println(id);
-		/*
-		 * Advertisement advertisement = advertisementRepository.findById(id).get();
-		 * String imagePath = advertisement.getImagePath(); imagePath.replace(name +
-		 * ",", ""); advertisement.setImagePath(imagePath);
-		 * advertisementRepository.save(advertisement);
-		 */
+		System.out.println(name);
+		  Advertisement advertisement = advertisementRepository.findById(id).get();
+		  String imagePath = advertisement.getImagePath();
+		  if(imagePath.endsWith(name))
+			  finalImagePath = imagePath.replace(name , "");
+		  else
+		      finalImagePath = imagePath.replace(name + ",", "");
+		  advertisement.setImagePath(finalImagePath);
+		  advertisementRepository.save(advertisement);
+		 
 	        return "Product with id  deleted successfully";
 	    }
 
