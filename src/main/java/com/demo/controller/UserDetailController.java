@@ -37,7 +37,6 @@ public class UserDetailController {
 	
 	@GetMapping("/userDetailByUsername")
 	public UserDetail getUserDetailByUsername(@RequestParam(value = "username") String username) {
-		System.out.println("oo");
 		UserDetail details = userDetailRepository.findByUsername(username);
 		return details;	
 	}
@@ -117,9 +116,10 @@ public class UserDetailController {
     }
 	
 	@GetMapping("/deleteCartIds")
-	public ResponseEntity<UserDetail> deleteCartIds(@RequestParam("cartIds") String cartId) {
+	public ResponseEntity<UserDetail> deleteCartIds(@RequestParam("cartIds") String cartId,
+			                                        @RequestParam(name = "username", required = false) String username) {
 		  String finalCartIds;
-		  UserDetail detail = userDetailRepository.findById(1).get();
+		  UserDetail detail = userDetailRepository.findByUsername(username);
 		  String cartIds = detail.getCartIds();
 			
 			 /*if(!cartIds.contains(","))
@@ -141,9 +141,10 @@ public class UserDetailController {
 	    }
 	
 	@GetMapping("/deleteWishlistIds")
-	public ResponseEntity<UserDetail> deleteWishlistIds(@RequestParam("wishlistIds") String wishlistId) {
+	public ResponseEntity<UserDetail> deleteWishlistIds(@RequestParam("wishlistIds") String wishlistId,
+			                                            @RequestParam(name = "username", required = false) String username) {
 		  String finalWishlistIds;
-		  UserDetail detail = userDetailRepository.findById(1).get();
+		  UserDetail detail = userDetailRepository.findByUsername(username);
 		  String wishlistIds = detail.getWishlistIds();
 		  if(wishlistIds.endsWith(wishlistId))
 			  finalWishlistIds = wishlistIds.replace(wishlistId, "");
