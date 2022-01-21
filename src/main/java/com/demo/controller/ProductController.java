@@ -68,8 +68,10 @@ public class ProductController {
 											@RequestParam(name="filter2", required=false) String filter2,
 											@RequestParam(name="price", required=false) String price,
 											@RequestParam(name="sort", required=false) String sort,
-											@RequestParam(name="enable", required=false) String enable
+											@RequestParam(name="enable", required=false) String enable,
+											@RequestParam(name="language", required=false) String language
 											){
+		System.out.println(language);
 		if("".equals(filter1) && "".equals(filter2) && "".equals(price)) {
 			System.out.println("initial");
 			return productRepository.findProducts();
