@@ -40,8 +40,8 @@ public class ConfigurationController {
 	    }
 	
 	@GetMapping("/configurationByKey")
-	public Iterable<Configuration> getAllProducts(@RequestParam(name="key") String key){
-		return configurationRepository.findByKey(key);
+	public Iterable<Configuration> getAllProducts(@RequestParam(name="key") String key, @RequestParam(name="language") String language){
+		return configurationRepository.findByKey(key, language);
 		
 	}
 	

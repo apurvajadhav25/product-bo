@@ -11,7 +11,7 @@ import com.demo.model.Configuration;
 @Repository
 public interface ConfigurationRepository extends JpaRepository<Configuration, Integer> {
 	
-	@Query("SELECT c FROM Configuration c WHERE c.key= :key")
-	 Collection<Configuration> findByKey(@Param("key") String key);
+	@Query("SELECT c FROM Configuration c WHERE c.key= :key and c.language= :language")
+	 Collection<Configuration> findByKey(@Param("key") String key, @Param("language") String language);
 
 }
