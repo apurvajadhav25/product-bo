@@ -1,9 +1,12 @@
 package com.demo.model;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class UserDetail {
@@ -17,6 +20,9 @@ public class UserDetail {
 	String isEnable;
 	String wishlistIds;
 	String cartIds;
+	
+	@OneToMany(mappedBy = "userDetail")
+	Set<Order> orders;
 	
 	public UserDetail() {
 		
