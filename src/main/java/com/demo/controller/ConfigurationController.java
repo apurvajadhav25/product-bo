@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.model.Configuration;
+import com.demo.model.Translation;
 import com.demo.repository.ConfigurationRepository;
 
 @RestController

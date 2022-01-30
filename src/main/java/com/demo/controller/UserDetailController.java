@@ -54,8 +54,9 @@ public class UserDetailController {
 	    }
 	
 	@PutMapping("/userDetail/{id}")
-    public ResponseEntity<UserDetail> updateFilter1(@PathVariable(value = "id") Integer id,
+    public ResponseEntity<UserDetail> updateUserDetail(@PathVariable(value = "id") Integer id,
                                                  @RequestBody UserDetail details) {
+		System.out.println("hguh");
         UserDetail detail = userDetailRepository.findById(id).get();
 
         detail.setUsername(details.getUsername());
@@ -65,7 +66,7 @@ public class UserDetailController {
         detail.setMobileNumber(details.getMobileNumber());
         detail.setPassword(details.getPassword());
         detail.setWishlistIds(details.getWishlistIds());
-        
+        detail.setLanguage(details.getLanguage());
         
         final UserDetail updatedDetail = userDetailRepository.save(detail);
         return ResponseEntity.ok(updatedDetail);

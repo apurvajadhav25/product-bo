@@ -1,7 +1,13 @@
 package com.demo.controller;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,10 +21,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.AbstractController;
 
-import com.demo.model.Filter1;
+import com.demo.JwelleryApplicationBackOfficeApplication;
+import com.demo.model.I18nLocaleTranslation;
 import com.demo.model.Image;
 import com.demo.model.Product;
+import com.demo.model.Translation;
+import com.demo.repository.I18nLocaleRepository;
+import com.demo.repository.I18nLocaleTranslationRepository;
 import com.demo.repository.ImageRepository;
 import com.demo.repository.ProductRepository;
 import com.demo.service.AmazonClient;
@@ -26,42 +37,32 @@ import com.demo.service.AmazonClient;
 @RestController
 @CrossOrigin
 public class ProductController {
+	
+	Map map = new HashMap<String, Map>();
+	Translation t = new Translation();
+	
 	@Autowired
 	ImageRepository imageRepository;
 	
 	@Autowired
 	ProductRepository productRepository;
 	
+	JwelleryApplicationBackOfficeApplication obj = new JwelleryApplicationBackOfficeApplication();
+	
 	private AmazonClient amazonClient;
 
-    @Autowired
-    ProductController(AmazonClient amazonClient) {
+	ProductController(AmazonClient amazonClient) {
         this.amazonClient = amazonClient;
     }
-
-
-	/*
-	 * @PostMapping("/products") public Product createProduct(@RequestBody
-	 * List<Product> productList) {
-	 * 
-	 * Product savedProduct = null; for(Product product: productList) { savedProduct
-	 * = productRepository.save(product); } return savedProduct; }
-	 */
+    
+	ProductController(){
+	 }
 	
 	@PostMapping("/products")
     public Product createProduct(@RequestBody Product product) {
-       
     	 Product savedProduct = productRepository.save(product);
-    	 
     	 return savedProduct;
     }
-	
-	/*
-	 * @GetMapping("/products") public Iterable<Product> getAllProducts(){ return
-	 * productRepository.findAll();
-	 * 
-	 * }
-	 */
 	
 	@GetMapping("/products")
 	public Iterable<Product> getAllProducts(@RequestParam(name="filter1", required=false) String filter1, 
@@ -72,9 +73,18 @@ public class ProductController {
 											@RequestParam(name="language", required=false) String language
 											){
 		System.out.println(language);
+		Map map = obj.getTransValue();
+		Map m1 = (Map) map.get(language);
 		if("".equals(filter1) && "".equals(filter2) && "".equals(price)) {
-			System.out.println("initial");
-			return productRepository.findProducts();
+			Collection<Product> products = productRepository.findProducts();
+			for(Product product: products) {
+				String nameValue = (String) m1.get(product.getName());
+				product.setName(nameValue);
+				
+				String descriptionValue = (String) m1.get(product.getDescription());
+				product.setDescription(descriptionValue);
+			}
+			return products;
 		} 
 		/*
 			 * else if(!"".equals(filter1) && "".equals(filter2)) { System.out.println("1");
@@ -82,14 +92,17 @@ public class ProductController {
 			 * if("".equals(filter1) && !"".equals(filter2)) { System.out.println("2");
 			 * return productRepository.findProductsByPurity(filter2); }
 			 */ else {
-			return productRepository.findProducts(filter1,filter2,price,sort,enable);
+				 Collection<Product> products = productRepository.findProducts(filter1,filter2,price,sort,enable);
+				 for(Product product: products) {
+						String nameValue = (String) m1.get(product.getName());
+						product.setName(nameValue);
+						
+						String descriptionValue = (String) m1.get(product.getDescription());
+						product.setDescription(descriptionValue);
+					}
+					return products;
 		}
 	}
-	
-	/*
-	 * @GetMapping("/products") public Iterable<Product> getEnableProduct(){ return
-	 * productRepository.findAll(); }
-	 */
 	
 	@GetMapping("/sortProducts")
 	public Iterable<Product> getSortedProducts(){
@@ -110,7 +123,6 @@ public class ProductController {
 	
 	@GetMapping("/products/{id}")
 	public Product getProductbyId(@PathVariable(value = "id") Integer productId) {
-		System.out.println("poonam");
 		Product product = productRepository.findById(productId).get();
 		return product;	
 	}
@@ -167,5 +179,7 @@ public class ProductController {
 	 * "url") String fileUrl) { return
 	 * this.amazonClient.deleteFileFromS3Bucket(fileUrl); }
 	 */
+	
+	
 
 }

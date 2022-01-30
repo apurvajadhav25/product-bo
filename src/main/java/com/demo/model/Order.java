@@ -31,8 +31,6 @@ public class Order {
 		this.userDetail = userDetail;
 	}
 
-
-
 	public int getId() {
 		return id;
 	}
@@ -64,7 +62,4 @@ public class Order {
 	public void setUserDetail(UserDetail userDetail) {
 		this.userDetail = userDetail;
 	}
-	
-	
-
 }

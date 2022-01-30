@@ -20,6 +20,7 @@ public class UserDetail {
 	String isEnable;
 	String wishlistIds;
 	String cartIds;
+	String language;
 	
 	@OneToMany(mappedBy = "userDetail")
 	Set<Order> orders;
@@ -77,8 +78,16 @@ public class UserDetail {
 		this.cartIds = cartIds;
 	}
 
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
 	public UserDetail(int id, String username, String password, String mobileNumber, String emailId, String isEnable,
-			String wishlistIds, String cartIds) {
+			String wishlistIds, String cartIds, String language) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -88,13 +97,7 @@ public class UserDetail {
 		this.isEnable = isEnable;
 		this.wishlistIds = wishlistIds;
 		this.cartIds = cartIds;
+		this.language = language;
 	}
-
-	
-
-	
-	
-	
-	
 
 }
