@@ -18,7 +18,6 @@ public class Image {
 	Product product;
 	
 	public Image() {
-		
 	}
 	
 	public Image(int id, String path, Product product) {

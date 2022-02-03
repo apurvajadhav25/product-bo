@@ -42,6 +42,7 @@ public class ConfigurationController {
 	
 	@GetMapping("/configurationByKey")
 	public Iterable<Configuration> getAllProducts(@RequestParam(name="key") String key, @RequestParam(name="language") String language){
+		System.out.println(language);
 		return configurationRepository.findByKey(key, language);
 		
 	}

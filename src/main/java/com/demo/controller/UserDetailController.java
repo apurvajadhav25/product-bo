@@ -97,6 +97,7 @@ public class UserDetailController {
 	@GetMapping("/updateWishlistId")
     public ResponseEntity<UserDetail> updateWishlistIds(@RequestParam(name = "wishlistIds", required = false) String wishlistId,
     		                                            @RequestParam(name = "username", required = false) String username){
+		System.out.println("in wishslist id");
 		String finalWishlistIds = null;
         UserDetail detail = userDetailRepository.findByUsername(username);
         String initialWishlistIds = detail.getWishlistIds();

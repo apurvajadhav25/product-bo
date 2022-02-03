@@ -38,8 +38,6 @@ import com.demo.service.AmazonClient;
 @CrossOrigin
 public class ProductController {
 	
-	Map map = new HashMap<String, Map>();
-	Translation t = new Translation();
 	
 	@Autowired
 	ImageRepository imageRepository;
@@ -48,6 +46,7 @@ public class ProductController {
 	ProductRepository productRepository;
 	
 	JwelleryApplicationBackOfficeApplication obj = new JwelleryApplicationBackOfficeApplication();
+	Map map = obj.getTransValue();
 	
 	private AmazonClient amazonClient;
 
@@ -72,8 +71,6 @@ public class ProductController {
 											@RequestParam(name="enable", required=false) String enable,
 											@RequestParam(name="language", required=false) String language
 											){
-		System.out.println(language);
-		Map map = obj.getTransValue();
 		Map m1 = (Map) map.get(language);
 		if("".equals(filter1) && "".equals(filter2) && "".equals(price)) {
 			Collection<Product> products = productRepository.findProducts();
@@ -122,8 +119,17 @@ public class ProductController {
 	    }
 	
 	@GetMapping("/products/{id}")
-	public Product getProductbyId(@PathVariable(value = "id") Integer productId) {
+	public Product getProductbyId(@PathVariable(value = "id") Integer productId,
+			                      @RequestParam(name="language", required=false) String language) {
+		Map m1 = (Map) map.get(language);
 		Product product = productRepository.findById(productId).get();
+		
+		String nameValue = (String) m1.get(product.getName());
+		product.setName(nameValue);
+		
+		String descriptionValue = (String) m1.get(product.getDescription());
+		product.setDescription(descriptionValue);
+		
 		return product;	
 	}
 	
